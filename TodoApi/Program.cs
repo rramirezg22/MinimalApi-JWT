@@ -17,7 +17,7 @@ builder.Services.AddDbContext<ApiDbContext>(options =>
 var securityScheme = new OpenApiSecurityScheme()
 {
     Name = "Authorization",
-    Type = SecuritySchemeType.ApiKey,
+    Type = SecuritySchemeType.Http,
     Scheme = "Bearer",
     BearerFormat = "JWT",
     In = ParameterLocation.Header,
@@ -161,7 +161,7 @@ app.MapPost("/accounts/login", [AllowAnonymous] (UserDto user) => {
                 new Claim(JwtRegisteredClaimNames.Email, user.username),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             }),
-            Expires = DateTime.Now.AddMinutes(5),
+            Expires = DateTime.UtcNow.AddMinutes(5),
             Audience = audience,
             Issuer = issuer,
             SigningCredentials = credentials
